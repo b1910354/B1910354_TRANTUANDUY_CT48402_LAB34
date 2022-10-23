@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../models/product.dart';
 import './products_manager.dart';
 import 'package:provider/provider.dart';
+import './edit_product_screen.dart';
 
 class UserProducListTitle extends StatelessWidget {
   final Product product;
@@ -46,12 +47,14 @@ class UserProducListTitle extends StatelessWidget {
   }
 
   Widget buildEditButton(BuildContext context) {
-    return IconButton(
-      icon: const Icon(Icons.edit),
-      onPressed: () {
-        print('Go to edit product screen');
-      },
-      color: Theme.of(context).primaryColor,
-    );
-  }
+  return IconButton(
+    icon: const Icon(Icons.edit),
+    onPressed: () {
+      Navigator.of(context).pushNamed(
+        EditProductScreen.routeName,
+        arguments: product.id,
+); },
+    color: Theme.of(context).primaryColor,
+  );
+}
 }

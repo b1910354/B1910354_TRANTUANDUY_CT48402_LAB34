@@ -19,6 +19,9 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(
             create: (ctx) => CartManager(),
           ),
+          ChangeNotifierProvider(
+            create: (ctx) => OrdersManager(),
+          )
         ],
         child: MaterialApp(
           title: 'My Shop',
@@ -39,11 +42,13 @@ class MyApp extends StatelessWidget {
                 const UserProductsScreen(),
           },
           onGenerateRoute: (settings) {
-            if (settings.name == ProductDetailScreen.routeName) {
-              final productId = settings.arguments as String;
+            if (settings.name == EditProductScreen.routeName) {
+              final productId = settings.arguments as String?;
               return MaterialPageRoute(builder: (ctx) {
-                return ProductDetailScreen(
-                  ctx.read<ProductManger>().findById(productId),
+                return EditProductScreen(
+                  productId != null
+                  ? ctx.read<ProductManger>().findById(productId)
+                  : null
                 );
               });
             }
