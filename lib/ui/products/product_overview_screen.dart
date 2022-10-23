@@ -4,6 +4,8 @@ import '../shared/app_drawer.dart';
 import '../cart/cart_screen.dart';
 import '../cart/cart_manager.dart';
 import 'top_right_badge.dart';
+import 'package:provider/provider.dart';
+
 enum FilterOptions { favorites, all }
 
 class ProductsOverviewScreen extends StatefulWidget {
@@ -15,7 +17,7 @@ class ProductsOverviewScreen extends StatefulWidget {
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   var _showOnlyFavorites = false;
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +25,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         title: const Text('MyShop'),
         actions: [
           buildProductFilterMenu(),
-          buildShoppingCarIcon(),
+          buildShoppingCartIcon(),
         ],
       ),
       drawer: const AppDrawer(),
@@ -31,15 +33,21 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
     );
   }
 
-  Widget buildShoppingCarIcon() {
-    return TopRightBadge(
-      data: CartManager().productCount,
-      child: IconButton(
-        icon: const Icon(Icons.shopping_cart),
-        onPressed: () {
-          Navigator.of(context).pushNamed(CartScreen.routeName);
-        },
-      ),
+  Widget buildShoppingCartIcon() {
+    return Consumer<CartManager>(
+      builder: (ctx, cartManager, child) {
+        return TopRightBadge(
+          data: cartManager.productCount,
+          child: IconButton(
+            icon: const Icon(
+              Icons.shopping_cart,
+            ),
+            onPressed: () {
+              Navigator.of(ctx).pushNamed(CartScreen.routeName);
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -47,7 +55,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
     return PopupMenuButton(
       onSelected: (FilterOptions selectedValue) {
         setState(() {
-          if(selectedValue == FilterOptions.favorites) {
+          if (selectedValue == FilterOptions.favorites) {
             _showOnlyFavorites = true;
           } else {
             _showOnlyFavorites = false;
